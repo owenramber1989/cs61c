@@ -1,3 +1,6 @@
 [submodule "projects/fa22-proj1-starter"]
 	path = projects/fa22-proj1-starter
 	url = git@github.com:61c-teach/fa22-proj1-starter.git
+[submodule "projects/fa22-proj2-starter"]
+	path = projects/fa22-proj2-starter
+	url = https://github.com/61c-teach/fa22-proj2-starter.git
