@@ -51,14 +51,21 @@ pow:
     # BEGIN PROLOGUE
     # FIXME Need to save the calle saved register(s)
     # END PROLOGUE
+    addi sp,sp,-4
+    sw s0,0(sp)
     li s0, 1
+    
 pow_loop:
+
     beq a1, zero, pow_end
     mul s0, s0, a0
     addi a1, a1, -1
     j pow_loop
 pow_end:
+    
     mv a0, s0
+    lw s0,0(sp)
+    addi sp,sp,4
     # BEGIN EPILOGUE
     # FIXME Need to restore the calle saved register(s)
     # END EPILOGUE
@@ -73,8 +80,10 @@ pow_end:
 inc_arr:
     # BEGIN PROLOGUE
     # FIXME What other registers need to be saved?
-    addi sp, sp, -4
+    addi sp, sp, -12
     sw ra, 0(sp)
+    sw s0, 4(sp)
+    sw s1, 8(sp)
     # END PROLOGUE
     mv s0, a0 # Copy start of array to saved register
     mv s1, a1 # Copy length of array to saved register
@@ -88,7 +97,11 @@ inc_arr_loop:
     # FIXME Add code to preserve the value in t0 before we call helper_fn
     # Also ask yourself this: why don't we need to preserve t1?
     #
+    addi sp,sp,-4
+    sw t0, 0(sp)
     jal helper_fn
+    lw t0, 0(sp)
+    addi sp,sp,4
     # FIXME Restore t0
     # Finished call for helper_fn
     addi t0, t0, 1 # Increment counter
@@ -97,7 +110,9 @@ inc_arr_end:
     # BEGIN EPILOGUE
     # FIXME What other registers need to be restored?
     lw ra, 0(sp)
-    addi sp, sp, 4
+    lw s0, 4(sp)
+    lw s1, 8(sp)
+    addi sp, sp, 12
     # END EPILOGUE
     ret
 
@@ -113,9 +128,13 @@ helper_fn:
     # BEGIN PROLOGUE
     # FIXME: YOUR CODE HERE
     # END PROLOGUE
+    addi sp,sp,-4
+    sw s0, 0(sp)
     lw t1, 0(a0)
     addi s0, t1, 1
     sw s0, 0(a0)
+    lw s0, 0(sp)
+    addi sp,sp,4
     # BEGIN EPILOGUE
     # FIXME: YOUR CODE HERE
     # END EPILOGUE
